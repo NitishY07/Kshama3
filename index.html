@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin:0;
+  font-family:'Roboto', sans-serif;
+  background:black;
+  color:white;
+  text-align:center;
+}
+
+/* SCREENS */
+.screen {
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  pointer-events:none;
+  transition:1s;
+}
+
+.screen.active {
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* VIDEO */
+video {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* GRID (3x3 = 9 pics) */
+.grid {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:10px;
+  width:90%;
+  max-width:420px;
+}
+
+.grid img {
+  width:100%;
+  aspect-ratio:3/4;
+  object-fit:cover;
+  border-radius:14px;
+}
+
+/* FINAL */
+.final-container {
+  width:90%;
+  max-width:420px;
+  height:90%;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+/* TEXT FIXED */
+.story {
+  font-size:15px;
+  line-height:1.5;   /* 🔥 reduced gap */
+  text-align:center;
+  opacity:0;
+  animation:fadeIn 2s forwards;
+}
+
+.story p {
+  margin:8px 0;  /* 🔥 small clean spacing */
+}
+
+/* BUTTON */
+button {
+  padding:12px 24px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(45deg,#ff4d6d,#ff758f);
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+  margin-bottom:15px;
+}
+
+/* FADE */
+@keyframes fadeIn {
+  to { opacity:1; }
+}
+
+/* PETALS */
+.petal {
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:#ff4d6d;
+  border-radius:50%;
+  opacity:0.6;
+  animation:fall linear infinite;
+}
+
+@keyframes fall {
+  0% { transform:translateY(-100px);}
+  100% { transform:translateY(100vh);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- START -->
+<div class="screen active" id="start">
+  <div>
+    <h2>Hey… I made something for you ❤️</h2>
+    <button onclick="startExperience()">Tap to continue</button>
+  </div>
+</div>
+
+<!-- VIDEO -->
+<div class="screen" id="videoScreen">
+  <video id="reel" playsinline>
+    <source src="your-video.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- PHOTOS -->
+<div class="screen" id="photosScreen">
+  <div>
+    <h2>Every moment with you ❤️</h2>
+    <div class="grid" id="photoGrid"></div>
+  </div>
+</div>
+
+<!-- FINAL -->
+<div class="screen" id="finalScreen">
+  <div class="final-container">
+
+    <div class="story">
+      <p>I still remember the first day we met… on the badminton court.</p>
+      <p>It was just a normal day… but somehow, it became special because of you.</p>
+      <p>Slowly, those little moments started meaning more to me.</p>
+      <p>Your smile, your way of talking… everything stayed with me.</p>
+      <p>I never planned to feel this way… it just happened.</p>
+      <p>And today, I understand what you feel… and I respect it.</p>
+      <p>I don’t want to force anything between us…</p>
+      <p>because what we have is already rare and special.</p>
+      <p>You are important to me… more than I can explain.</p>
+      <p>So whatever happens in the future…</p>
+      <p>I just want one thing — to keep you in my life. ❤️</p>
+    </div>
+
+    <button onclick="yesClicked()">Stay with me 🤍</button>
+
+  </div>
+</div>
+
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mp3">
+</audio>
+
+<script>
+function switchScreen(from, to){
+  document.getElementById(from).classList.remove('active');
+  document.getElementById(to).classList.add('active');
+}
+
+function startExperience() {
+  let video = document.getElementById('reel');
+  let music = document.getElementById('bgMusic');
+
+  music.play();
+  video.play();
+
+  switchScreen('start','videoScreen');
+
+  video.onended = () => {
+    switchScreen('videoScreen','photosScreen');
+    showPhotos();
+  }
+}
+
+/* 9 IMAGES ONLY */
+function showPhotos() {
+  let grid = document.getElementById('photoGrid');
+
+  let images = [
+    "img1.jpeg","img2.jpeg","img3.jpeg",
+    "img4.jpeg","img5.jpeg","img6.jpeg",
+    "img7.jpeg","img8.jpeg","img9.jpeg"
+  ];
+
+  images.forEach(src => {
+    let img = document.createElement('img');
+    img.src = src;
+    grid.appendChild(img);
+  });
+
+  setTimeout(() => {
+    switchScreen('photosScreen','finalScreen');
+    createPetals();
+  }, 5000);
+}
+
+/* PETALS */
+function createPetals() {
+  for(let i=0;i<25;i++){
+    let p = document.createElement('div');
+    p.className='petal';
+    p.style.left=Math.random()*100+"%";
+    p.style.animationDuration=(3+Math.random()*3)+"s";
+    document.body.appendChild(p);
+  }
+}
+
+function yesClicked(){
+  alert("No matter what… you’re special to me ❤️");
+}
+</script>
+
+</body>
+</html>
